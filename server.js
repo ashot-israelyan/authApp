@@ -1,44 +1,85 @@
 var express = require('express');
-var fs = require('fs');
+var path = require('path');
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
+var exphbs = require('express-handlebars');
+var expressValidator = require('express-validator');
+var flash = require('connect-flash');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/test');
+var db = mongoose.connection;
 
-var Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId;
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
-var BlogPost = new Schema({
-  author    : ObjectId,
-  title     : String,
-  body      : String,
-  date      : Date
-});
-
+// Init App
 var app = express();
 
-app.use(bodyParser.urlencoded({extended: false}));
+//View Engine
+app.set('views', path.join(__dirname, 'views'));
+app.engine('handlebars', exphbs({defaultLayout: 'layout'}));
+app.set('view engine', 'handlebars');
+
+// BodyParser Middleware
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
 
-app.get('/', function (req, res) {
-  res.send('Please Register or Login!!!');
-});
+//Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.post('/', multipartMiddleware, function(req, resp, next) {
-  console.log(req.body, req.files);
-  var pathTemp = req.files.image.path;
-  var newFolder = process.cwd() + '/uploads/' + req.body.name + '-' + req.files.image.name;
-  
-  fs.rename(pathTemp, newFolder, function (err) {
-    if (err) throw err;
-    console.log('Uploaded');
-  });
+//Express Session
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: true
+}));
 
+//Pasport init
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Express Validator
+app.use(expressValidator({
+  errorFormatter: function (param, msg, value) {
+    var namespace = param.split('.')
+      , root = namespace.shift()
+      , formParam = root;
+
+    while (namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param: formParam,
+      msg: msg,
+      value: value
+    };
+  }
+}));
+
+// Connect Flash
+app.use(flash());
+
+//Global Variables
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.user || null;
   next();
 });
 
-app.listen(3000, function () {
-  console.log('Listening on Port 3000');
+app.use('/', routes);
+app.use('/users', users);
+
+// Set Port
+app.set('port', (process.env.PORT || 3000));
+
+app.listen(app.get('port'), function () {
+  console.log('Server started on port ' + app.get('port'));
 });

@@ -60,4 +60,4 @@ typings/
 # Custom declarations
 .idea/*
 .DS_Store
-uploads/
+public/uploads/
