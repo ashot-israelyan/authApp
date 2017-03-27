@@ -40,17 +40,27 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'first_name', 'last_name', 'photos', 'email']
   },
   function (accessToken, refreshToken, profile, done) {
-    User.getUserByEmail(profile._json.email, function (err, user) {
-      if (err) done(err);
 
-      if (user) {
-        done(null, user);
-      } else {
+    var firstName = profile._json.first_name,
+      lastName = profile._json.last_name,
+      email = profile._json.email,
+      image = profile._json.picture.data.url;
+
+
+    User.getUserByEmail(email, function (err, user) {
+
+      if (err) {
+        console.log(err);
+        done(err);
+      }
+
+      if (!user) {
         var newUser = new User({
-          name: profile._json.first_name,
-          surname: profile._json.last_name,
-          email: profile._json.email,
-          image: profile._json.picture.data.url
+          name: firstName,
+          surname: lastName,
+          username: firstName.toLowerCase() + '.' + lastName.toLowerCase(),
+          email: email,
+          image: image
         });
 
         User.createUser(newUser, function (err, user) {
@@ -58,6 +68,7 @@ passport.use(new FacebookStrategy({
           console.log(user);
         });
       }
+      done(null, user);
     });
   }
 ));

@@ -9,12 +9,10 @@ var UserSchema = mongoose.Schema({
     type: String
   },
   username: {
-    type: String,
-    required: true
+    type: String
   },
   password: {
-    type: String,
-    required: true
+    type: String
   },
   email: {
     type: String,
@@ -48,9 +46,9 @@ module.exports.getUserByUsername = function(username, callback){
   User.findOne(query, callback);
 };
 
-module.exports.getUserByEmail = function (email, callback) {
+module.exports.getUserByEmail = function(email, callback){
   var query = {email: email};
-  User.findOne(query).select('username password email').exec(callback);
+  User.findOne(query, callback);
 };
 
 module.exports.getUserById = function (id, callback) {

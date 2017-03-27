@@ -11,7 +11,6 @@ var express = require('express'),
   morgan = require('morgan');
 
 mongoose.connect('mongodb://127.0.0.1:27017/test');
-var db = mongoose.connection;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -24,13 +23,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({defaultLayout: 'layout'}));
 app.set('view engine', 'handlebars');
 
-// Middlewares
+// Middleware
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-
-//Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Express Session
@@ -40,7 +37,7 @@ app.use(session({
   resave: true
 }));
 
-//Pasport init
+//Passport init
 app.use(passport.initialize());
 app.use(passport.session());
 

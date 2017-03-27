@@ -11,11 +11,37 @@ module.exports.registerUser = function (req, res) {
   var imagename = req.body.imagename;
 
   //Validation
-  req.checkBody('name', 'Name is required').notEmpty();
-  req.checkBody('surname', 'Surname is required').notEmpty();
-  req.checkBody('username', 'Username is required').notEmpty();
-  req.checkBody('password', 'Password is required').notEmpty();
-  req.checkBody('email', 'Email is not valid').isEmail();
+  req.checkBody({
+    'name' : {
+      isLength: {
+        options: [{min: 2, max: 50}],
+        errorMessage: 'Must be between 2 and 50 chars long'
+      }
+    },
+    'surname' : {
+      isLength: {
+        options: [{min: 2, max: 50}],
+        errorMessage: 'Must be between 2 and 50 chars long'
+      }
+    },
+    'username' : {
+      notEmpty: true,
+      isLength: {
+        options: [{min: 2, max: 10}],
+        errorMessage: 'Must be between 2 and 10 chars long'
+      }
+    },
+    'password': {
+      notEmpty: true,
+      errorMessage: 'Invalid Password' // Error message for the parameter
+    },
+    'email': {
+      notEmpty: true,
+      isEmail: {
+        errorMessage: 'Invalid Email'
+      }
+    }
+  });
 
   var errors = req.validationErrors();
 
@@ -54,4 +80,3 @@ module.exports.registerUser = function (req, res) {
     res.redirect('/users/login');
   }
 };
-

@@ -17,7 +17,11 @@ router.get('/register', function (req, res) {
 
 //Get Login Page
 router.get('/login', function (req, res) {
-  res.render('login');
+  if (req.isAuthenticated()) {
+    res.redirect('/');
+  } else {
+    res.render('login');
+  }
 });
 
 //Register User
@@ -35,10 +39,15 @@ router.post('/login', passport.authenticate('local', {
 );
 
 // Login with Facebook
-router.get('/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/users/login'}),
+router.get('/facebook/callback', passport.authenticate('facebook', {
+    failureRedirect: '/users/login',
+    failureFlash : true
+  }),
   function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
+  
+    req.flash('success_msg', 'You are registered and can now login');
+
+    res.redirect('/users/login');
   }
 );
 
