@@ -1,15 +1,14 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var exphbs = require('express-handlebars');
-var expressValidator = require('express-validator');
-var flash = require('connect-flash');
-var session = require('express-session');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
+var express = require('express'),
+  path = require('path'),
+  cookieParser = require('cookie-parser'),
+  bodyParser = require('body-parser'),
+  exphbs = require('express-handlebars'),
+  expressValidator = require('express-validator'),
+  flash = require('connect-flash'),
+  session = require('express-session'),
+  passport = require('passport'),
+  mongoose = require('mongoose'),
+  morgan = require('morgan');
 
 mongoose.connect('mongodb://127.0.0.1:27017/test');
 var db = mongoose.connection;
@@ -25,7 +24,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({defaultLayout: 'layout'}));
 app.set('view engine', 'handlebars');
 
-// BodyParser Middleware
+// Middlewares
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
