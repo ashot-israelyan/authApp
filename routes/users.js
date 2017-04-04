@@ -163,43 +163,32 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'first_name', 'last_name', 'photos', 'email']
   },
   function (accessToken, refreshToken, profile, done) {
-  User.getUserByFacebookID(profile._json.id, function (err, user) {
-    if (err) done (err);
-    if (user && user !== null) {
-      done(null, user);
-    } else {
-      User.getUserByEmail(profile._json.email, function (err, user) {
-        if (err) done (err);
-
-        if (user && user !== null) {
-          done(null, user);
-        } else {
-
-          var newUser = new User({
-            name: profile._json.first_name,
-            surname: profile._json.last_name,
-            email: profile._json.email,
-            image: profile._json.picture.data.url
-          });
-
-          User.createUser(newUser, function (err, user) {
-            if (err) throw err;
-
-            done(null, user);
-          });
-        }
-      });
-    }
-  });
-    //User.getUserByFacebookID({facebookId: profile.id}){}
-    User.findOne({email: profile._json.email}, function (err, user) {
+    User.getUserByFacebookID(profile._json.id, function (err, user) {
       if (err) done(err);
-
       if (user && user !== null) {
-        console.log('Successfull login');
         done(null, user);
       } else {
-        done(err);
+        User.getUserByEmail(profile._json.email, function (err, user) {
+          if (err) done(err);
+
+          if (user && user !== null) {
+            done(null, user);
+          } else {
+
+            var newUser = new User({
+              name: profile._json.first_name,
+              surname: profile._json.last_name,
+              email: profile._json.email,
+              image: profile._json.picture.data.url
+            });
+
+            User.createUser(newUser, function (err, user) {
+              if (err) throw err;
+
+              done(null, user);
+            });
+          }
+        });
       }
     });
   }
@@ -225,7 +214,7 @@ router.post('/login', passport.authenticate('local', {
 
 router.get('/facebook', passport.authenticate('facebook', {scope: 'email'}));
 
-router.get('/facebook/callback', passport.authenticate('facebook', {failurRedirect: '/'}), function (req, res) {
+router.get('/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/'}), function (req, res) {
   res.redirect('/dashboard');
 });
 

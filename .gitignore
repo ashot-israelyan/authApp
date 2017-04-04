@@ -58,6 +58,7 @@ typings/
 .env
 
 # Custom declarations
+.idea/
 .idea/*
 .DS_Store
 public/uploads/
