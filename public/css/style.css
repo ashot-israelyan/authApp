@@ -1,79 +1,107 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  overflow-x: hidden;
+  font-family: "Roboto Slab", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.header,
-.marketing,
-.footer {
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-.header {
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-
-.header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
-}
-
-.footer {
-  padding-top: 19px;
+.text-muted {
   color: #777;
-  border-top: 1px solid #e5e5e5;
 }
 
-@media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
-}
-.container-narrow > hr {
-  margin: 30px 0;
+.text-primary {
+  color: #1ee2e7;
 }
 
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-}
-.jumbotron .btn {
-  padding: 14px 24px;
-  font-size: 21px;
+p {
+  font-size: 14px;
+  line-height: 1.75;
 }
 
-.marketing {
-  margin: 40px 0;
-}
-.marketing p + h4 {
-  margin-top: 28px;
+p.large {
+  font-size: 16px;
 }
 
-@media screen and (min-width: 768px) {
-  .header,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  .header {
-    margin-bottom: 30px;
-  }
-
-  .jumbotron {
-    border-bottom: 0;
-  }
+a,
+a:hover,
+a:focus,
+a:active,
+a.active {
+  outline: 0;
 }
 
-.page-header{
+a {
+  color: #1ee2e7;
+}
+
+a:hover,
+a:focus,
+a:active,
+a.active {
+  color: #17d0d5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+  font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+.btn-xl {
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.navbar-default.navbar-shrink {
+  background-color: #222;
+}
+
+.navbar-default .navbar-brand {
+  font-family: 'Roboto', sans-serif;
+  color: #1ee2e7;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:active, .navbar-default .navbar-brand.active {
+  color: #fec503;
+}
+
+.navbar-default .nav li a {
+  color: #fff;
+}
+
+.navbar-default .nav li a:hover, .navbar-default .nav li a:focus {
+  outline: 0;
+  color: #1ee2e7;
+}
+
+h2.section-heading {
   margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 40px;
 }
 
-footer {
-  margin-top: 40px;
+h3.section-subheading {
+  margin-bottom: 75px;
+  text-transform: none;
+  font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+#loginForm {
+  overflow: hidden;
+  margin-bottom: 15px;
 }
