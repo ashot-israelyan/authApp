@@ -172,6 +172,14 @@ passport.use(new FacebookStrategy({
           if (err) done(err);
 
           if (user && user !== null) {
+            if (user.facebookId === 0) {
+              user.facebookId = profile._json.id;
+              User.save(user, function (err, user) {
+                if (err) throw err;
+                console.log('User updated');
+              });
+            }
+
             done(null, user);
           } else {
 
