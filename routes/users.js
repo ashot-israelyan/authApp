@@ -104,10 +104,10 @@ router.post('/register', multipartMiddleware, function (req, res) {
 
       newPath = '/uploads/' + imageName;
 
-      fs.rename(pathTemp, currentDest + newPath, function (err) {
-        if (err) throw err;
-        console.log("File Saved!!!");
-      });
+      // fs.rename(pathTemp, currentDest + newPath, function (err) {
+      //   if (err) throw err;
+      //   console.log("File Saved!!!");
+      // });
     }
 
     var newUser = new User({
