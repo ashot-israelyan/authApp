@@ -8,7 +8,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
 
-mongoose.connect('mongodb://authadmin:admin131016@ds153710.mlab.com:53710/heroku_lb8pjd9g', function (err) {
+mongoose.connect('mongodb://127.0.0.1:27017/authapi', function (err) {
   if (err) {
     console.log("Not connected to the database: " + err);
   } else {
