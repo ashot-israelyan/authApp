@@ -104,6 +104,10 @@ router.post('/register', multipartMiddleware, function (req, res) {
 
       newPath = '/uploads/' + imageName;
 
+      if (!fs.existsSync(currentDest + '/uploads')) {
+        fs.mkdirSync(currentDest + '/uploads');
+      }
+
       fs.rename(pathTemp, currentDest + newPath, function (err) {
         if (err) throw err;
         console.log("File Saved!!!");
