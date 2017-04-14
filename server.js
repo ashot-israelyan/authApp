@@ -7,6 +7,9 @@ var expressValidator = require('express-validator');
 var passport = require('passport');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
+var redis = require('redis');
+var Redistore = require('connect-redis')(session);
+var client = redis.createClient();
 
 mongoose.connect('mongodb://127.0.0.1:27017/authapi', function (err) {
   if (err) {
@@ -37,7 +40,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'secret',
   saveUninitialized: true,
-  resave: true
+  resave: true,
+  store: new Redistore({
+    host: 'localhost',
+    port: 6379,
+    client: client
+  })
 }));
 
 // Passport Init
