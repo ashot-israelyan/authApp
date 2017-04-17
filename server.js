@@ -3,13 +3,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var expressValidator = require('express-validator');
 var passport = require('passport');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
-var redis = require('redis');
-var Redistore = require('connect-redis')(session);
-var client = redis.createClient();
+var MongoStore = require('connect-mongo')(session);
 
 mongoose.connect('mongodb://127.0.0.1:27017/authapi', function (err) {
   if (err) {
@@ -18,6 +15,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/authapi', function (err) {
     console.log("Successfully connected to the database");
   }
 });
+mongoose.Promise = global.Promise;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -38,36 +36,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
 app.use(session({
-  secret: 'secret',
+  secret: 'supersecret',
   saveUninitialized: true,
   resave: true,
-  store: new Redistore({
-    host: 'localhost',
-    port: 6379,
-    client: client
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection
   })
 }));
 
 // Passport Init
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
-    var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
-
-    while(namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
-    }
-    return {
-      param : formParam,
-      msg   : msg,
-      value : value
-    };
-  }
-}));
 
 // Routes
 app.use('/', routes);
